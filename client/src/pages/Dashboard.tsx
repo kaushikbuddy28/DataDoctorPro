@@ -12,6 +12,8 @@ import DataVisualizations from "@/components/DataVisualizations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import DownloadCard from "@/components/ui/DownloadCard";
+import { downloadReport } from "@/lib/reportGenerator";
+import type { ProcessedDataset } from "../types";
 import {
   FileSpreadsheet,
   FileText,
@@ -33,7 +35,7 @@ export default function Dashboard() {
   const [isSaving, setIsSaving] = useState(false);
 
   // Get dataset
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<ProcessedDataset>({
     queryKey: [`/api/datasets/${id}`],
     enabled: !!id,
   });
@@ -91,14 +93,23 @@ export default function Dashboard() {
 
   const handleDownloadReport = async () => {
     try {
-      window.location.href = `/api/datasets/${id}/report`;
+      if (!data) {
+        throw new Error("Dataset not available");
+      }
+      
+      // Download the report using the client-side report generator
+      await downloadReport(data);
+      toast({
+        title: "Report generated",
+        description: "Your report has been downloaded successfully",
+      });
     } catch (error) {
       toast({
         title: "Download failed",
         description:
           error instanceof Error
             ? error.message
-            : "Failed to download report",
+            : "Failed to generate report",
         variant: "destructive",
       });
     }
@@ -273,7 +284,7 @@ export default function Dashboard() {
                     onClick={handleDownloadReport}
                     className="bg-red-600 hover:bg-red-700"
                   >
-                    PDF
+                    DOCX
                   </Button>
                 }
               />

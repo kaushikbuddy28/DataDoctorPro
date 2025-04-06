@@ -43,6 +43,9 @@ export interface ProcessedDataset extends DatasetPreview {
   cleanedPreview: any[] | null;
   createdAt: string;
   savedProjectName?: string;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
 }
 
 export interface DatasetStats {
