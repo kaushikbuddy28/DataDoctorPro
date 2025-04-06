@@ -6,6 +6,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// API Logger
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -39,24 +40,24 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
+  // Error handler
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
-
     res.status(status).json({ message });
     throw err;
   });
 
-  // Setup Vite in development mode only
+  // Conditionally serve Vite (dev) or static files (production)
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
-    serveStatic(app);
+    serveStatic(app); // Make sure `server/public` exists with frontend files!
   }
 
-  // Standard and compatible way to start the server
-  const port = 5000;
-  server.listen(port, 'localhost', () => {
-    log(`✅ Server is running at http://localhost:${port}`);
+  // Start server on Render-compatible host and port
+  const port = parseInt(process.env.PORT || "5000", 10);
+  server.listen(port, "0.0.0.0", () => {
+    log(`✅ Server is running on http://0.0.0.0:${port}`);
   });
 })();
