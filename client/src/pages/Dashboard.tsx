@@ -151,73 +151,73 @@ export default function Dashboard() {
 
       {/* Data Preview and Comparison */}
       <Card>
-        <CardHeader className="border-b border-border">
-          <Tabs
-            defaultValue="raw"
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
+        <Tabs
+          defaultValue="raw"
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-full"
+        >
+          <CardHeader className="border-b border-border">
             <TabsList className="grid w-full md:w-auto grid-cols-3">
               <TabsTrigger value="raw">Raw Data</TabsTrigger>
               <TabsTrigger value="cleaned">Cleaned Data</TabsTrigger>
               <TabsTrigger value="comparison">Side-by-Side</TabsTrigger>
             </TabsList>
-          </Tabs>
-        </CardHeader>
+          </CardHeader>
 
-        <CardContent className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">
-              Data Preview{" "}
-              <span className="text-sm text-muted-foreground font-normal ml-2">
-                {data.fileName} ({(data.fileSize / 1024).toFixed(1)} KB)
-              </span>
-            </h2>
-          </div>
+          <CardContent className="p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">
+                Data Preview{" "}
+                <span className="text-sm text-muted-foreground font-normal ml-2">
+                  {data.fileName} ({(data.fileSize / 1024).toFixed(1)} KB)
+                </span>
+              </h2>
+            </div>
 
-          <TabsContent value="raw" className="mt-0">
-            <DataTable data={data.rawPreview || []} columns={rawColumns} />
-          </TabsContent>
+            <TabsContent value="raw" className="mt-0">
+              <DataTable data={data.rawPreview || []} columns={rawColumns} />
+            </TabsContent>
 
-          <TabsContent value="cleaned" className="mt-0">
-            {data.cleanedPreview ? (
-              <DataTable 
-                data={data.cleanedPreview || []} 
-                columns={cleanedColumns} 
-              />
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                No cleaned data available yet
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="comparison" className="mt-0">
-            {data.cleanedPreview ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-medium mb-2">Raw Data</h3>
-                  <DataTable 
-                    data={data.rawPreview.slice(0, 5) || []} 
-                    columns={rawColumns} 
-                  />
+            <TabsContent value="cleaned" className="mt-0">
+              {data.cleanedPreview ? (
+                <DataTable 
+                  data={data.cleanedPreview || []} 
+                  columns={cleanedColumns} 
+                />
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  No cleaned data available yet
                 </div>
-                <div>
-                  <h3 className="font-medium mb-2">Cleaned Data</h3>
-                  <DataTable 
-                    data={data.cleanedPreview.slice(0, 5) || []} 
-                    columns={cleanedColumns} 
-                  />
+              )}
+            </TabsContent>
+
+            <TabsContent value="comparison" className="mt-0">
+              {data.cleanedPreview ? (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-medium mb-2">Raw Data</h3>
+                    <DataTable 
+                      data={data.rawPreview.slice(0, 5) || []} 
+                      columns={rawColumns} 
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-medium mb-2">Cleaned Data</h3>
+                    <DataTable 
+                      data={data.cleanedPreview.slice(0, 5) || []} 
+                      columns={cleanedColumns} 
+                    />
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                No comparison available yet
-              </div>
-            )}
-          </TabsContent>
-        </CardContent>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  No comparison available yet
+                </div>
+              )}
+            </TabsContent>
+          </CardContent>
+        </Tabs>
       </Card>
 
       {/* Summary Report */}
