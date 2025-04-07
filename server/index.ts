@@ -55,11 +55,10 @@ app.use((req, res, next) => {
     serveStatic(app); // Make sure `server/public` exists with frontend files!
   }
 
-  // Start server on your local IP (adjust for LAN access)
+  // ✅ FIXED: Do not bind to specific IP. Use Render-provided PORT.
   const port = parseInt(process.env.PORT || "5000", 10);
-  const host = "192.168.1.29"; // Change this to your local IP or "localhost"
 
-  server.listen(port, host, () => {
-    log(`✅ Server is running on http://${host}:${port}`);
+  server.listen(port, () => {
+    log(`✅ Server is running on port ${port}`);
   });
 })();
